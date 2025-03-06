@@ -1,0 +1,138 @@
+{
+	"info": {
+		"_postman_id": "9f972af6-14a2-4886-ac19-a783752d5f5b",
+		"name": "TTB LLM-Fastapi",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "21232087"
+	},
+	"item": [
+		{
+			"name": "openai",
+			"item": [
+				{
+					"name": "Chat",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/v1/openai/chat",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"openai",
+								"chat"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Tourism",
+			"item": [
+				{
+					"name": "Chat",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"query\": \"อยากไปเที่ยวเชียงใหม่ช่วงปลายปี\",\r\n  \"destination\": \"เชียงใหม่\",\r\n  \"budget\": 10000,\r\n  \"duration\": 3,\r\n  \"interests\": [\"อาหาร\", \"ธรรมชาติ\", \"วัฒนธรรม\"]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/tourism/travel-plan",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"tourism",
+								"travel-plan"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "เที่ยวเชียงใหม่",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"query\": \"อยากไปเที่ยวเชียงใหม่ช่วงปลายปี\",\r\n  \"destination\": \"เชียงใหม่\",\r\n  \"budget\": 10000,\r\n  \"duration\": 3,\r\n  \"interests\": [\"อาหาร\", \"ธรรมชาติ\", \"วัฒนธรรม\"]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/api/v1/tourism/travel-plan",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"tourism",
+										"travel-plan"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "date",
+									"value": "Thu, 06 Mar 2025 10:00:47 GMT"
+								},
+								{
+									"key": "server",
+									"value": "uvicorn"
+								},
+								{
+									"key": "content-length",
+									"value": "4425"
+								},
+								{
+									"key": "content-type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"travel_plan\": {\n        \"destination\": \"เชียงใหม่\",\n        \"duration\": 3,\n        \"overview\": \"การท่องเที่ยวเชียงใหม่ช่วงปลายปี เพื่อสัมผัสวัฒนธรรมท้องถิ่น แหล่งอาหารอร่อย และสิ่งแวดล้อมธรรมชาติที่งดงาม\",\n        \"daily_itinerary\": [\n            {\n                \"day\": 1,\n                \"attractions\": [\n                    {\n                        \"name\": \"วัดพระสิงห์\",\n                        \"description\": \"วัดสวยงดงามที่ตั้งบนเนินเขา มีหอคอยทอง และพระธาตุที่สำคัญ\",\n                        \"category\": \"วัฒนธรรม\",\n                        \"estimated_time\": \"2 ชั่วโมง\",\n                        \"estimated_cost\": 100,\n                        \"recommended_time_of_day\": \"เช้า\"\n                    },\n                    {\n                        \"name\": \"ตลาดวรรัตน์\",\n                        \"description\": \"ตลาดสดใหม่แห่งหนึ่งที่มีอาหารอร่อยในราคาที่คุ้มค่า\",\n                        \"category\": \"อาหาร\",\n                        \"estimated_time\": \"1 ชั่วโมง\",\n                        \"estimated_cost\": 150,\n                        \"recommended_time_of_day\": \"กลางวัน\"\n                    }\n                ],\n                \"activities\": [\n                    {\n                        \"name\": \"ชมวิวจากดอยสุเทพ\",\n                        \"description\": \"ชมวิวทิวทัศน์ที่สวยงามจากดอยสุเทพ\",\n                        \"duration\": \"3 ชั่วโมง\",\n                        \"estimated_cost\": 500,\n                        \"location\": \"ดอยสุเทพ\"\n                    }\n                ],\n                \"meals\": [\n                    \"มื้อเช้า: ข้าวต้ม\",\n                    \"มื้อกลางวัน: ข้าวแกง\",\n                    \"มื้อเย็น: ส้มตำ\"\n                ],\n                \"transportation\": [\n                    \"สองล้อเช่า\",\n                    \"รถแท็กซี่\"\n                ],\n                \"daily_cost_estimate\": 750\n            },\n            {\n                \"day\": 2,\n                \"attractions\": [\n                    {\n                        \"name\": \"สวนสันติภาพ\",\n                        \"description\": \"สวนสวยงดงามที่มีบรรยากาศเงียบสงบ\",\n                        \"category\": \"ธรรมชาติ\",\n                        \"estimated_time\": \"2 ชั่วโมง\",\n                        \"estimated_cost\": 50,\n                        \"recommended_time_of_day\": \"เช้า\"\n                    },\n                    {\n                        \"name\": \"วัดฟารัง\",\n                        \"description\": \"วัดเก่าแก่ที่มีประวัติศาสตร์ยาวนาน\",\n                        \"category\": \"วัฒนธรรม\",\n                        \"estimated_time\": \"1 ชั่วโมง\",\n                        \"estimated_cost\": 50,\n                        \"recommended_time_of_day\": \"บ่าย\"\n                    }\n                ],\n                \"activities\": [\n                    {\n                        \"name\": \"ทำบุญที่วัด\",\n                        \"description\": \"เพื่อพัฒนาจิตใจ\",\n                        \"duration\": \"2 ชั่วโมง\",\n                        \"estimated_cost\": 0,\n                        \"location\": \"วัด\"\n                    }\n                ],\n                \"meals\": [\n                    \"มื้อเช้า: ขนมจีน\",\n                    \"มื้อกลางวัน: ข้าวผัด\",\n                    \"มื้อเย็น: หมูกระทะ\"\n                ],\n                \"transportation\": [\n                    \"รถเช่า\",\n                    \"วอล์กชาร์ต\"\n                ],\n                \"daily_cost_estimate\": 350\n            },\n            {\n                \"day\": 3,\n                \"attractions\": [\n                    {\n                        \"name\": \"สวนสาธารณะดอยสุเทพ\",\n                        \"description\": \"สวนสาธารณะที่มีบรรยากาสงดงามและกว้างขวาง\",\n                        \"category\": \"ธรรมชาติ\",\n                        \"estimated_time\": \"3 ชั่วโมง\",\n                        \"estimated_cost\": 0,\n                        \"recommended_time_of_day\": \"เช้า\"\n                    },\n                    {\n                        \"name\": \"ถ้ำเชียงดาว\",\n                        \"description\": \"ถ้ำที่ลึกลับและตื่นเต้น\",\n                        \"category\": \"ธรรมชาติ\",\n                        \"estimated_time\": \"2 ชั่วโมง\",\n                        \"estimated_cost\": 200,\n                        \"recommended_time_of_day\": \"บ่าย\"\n                    }\n                ],\n                \"activities\": [\n                    {\n                        \"name\": \"ปิดทรอป์พะอยู่อ่อ\",\n                        \"description\": \"กิจกรรมทำบุญที่ศาลาวัด\",\n                        \"duration\": \"1 ชั่วโมง\",\n                        \"estimated_cost\": 50,\n                        \"location\": \"วัด\"\n                    }\n                ],\n                \"meals\": [\n                    \"มื้อเช้า: ขนมปัง\",\n                    \"มื้อกลางวัน: ผัดไทย\",\n                    \"มื้อเย็น: ลาบ\"\n                ],\n                \"transportation\": [\n                    \"รถตู้ทัวร์\",\n                    \"สกู๊ตเตอร์\"\n                ],\n                \"daily_cost_estimate\": 250\n            }\n        ],\n        \"total_cost_estimate\": 1350,\n        \"tips\": [\n            \"นำน้ำมาดื่มเพียงพอ\",\n            \"เดินทางด้วยเสื้อผ้าที่สบายๆ\"\n        ],\n        \"best_time_to_visit\": \"เดือนธันวาคมถึงกุมภาพันธ์\",\n        \"local_customs\": [\n            \"นำหมอดินไปทำบุญที่วัด\",\n            \"นับถอนเงินให้แก่ภูเขา\"\n        ]\n    }\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "health",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{host}}/health",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"health"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
