@@ -3,8 +3,8 @@ from schema.mt5.connection_models import MT5ConnectionRequest, MT5ConnectionResp
 from services.mt5_service import MT5Service
 
 router = APIRouter(
-    prefix="/api/v1/mt5",
-    tags=["MT5"]
+    prefix="/api/v1/mt5/connection",
+    tags=["MT5 Connection"]
 )
 
 @router.post("/connect", response_model=MT5ConnectionResponse)

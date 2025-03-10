@@ -9,6 +9,9 @@ uvicorn = "*"
 openai = "*"
 python-dotenv = "*"
 httpx = "*"
+metatrader5 = "*"
+pytz = "*"
+pandas = "*"
 
 [dev-packages]
 

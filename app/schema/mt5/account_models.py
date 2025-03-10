@@ -2,6 +2,50 @@ from pydantic import BaseModel, Field
 from typing import List, Dict, Any, Optional
 from datetime import datetime
 
+# Request Models
+class AccountInfoRequest(BaseModel):
+    """
+    คลาสสำหรับ request ข้อมูลบัญชี
+    """
+    pass  # ไม่จำเป็นต้องมีพารามิเตอร์เพราะใช้ข้อมูลการเชื่อมต่อปัจจุบัน
+
+class PositionsRequest(BaseModel):
+    """
+    คลาสสำหรับ request ข้อมูลตำแหน่งที่เปิดอยู่
+    """
+    symbol: Optional[str] = Field(None, description="สัญลักษณ์เฉพาะ (ถ้าไม่ระบุจะดึงทั้งหมด)")
+    ticket: Optional[int] = Field(None, description="เลขที่ตำแหน่ง (ถ้าไม่ระบุจะดึงทั้งหมด)")
+    magic: Optional[int] = Field(None, description="หมายเลข Magic (ถ้าไม่ระบุจะดึงทั้งหมด)")
+
+class OrdersRequest(BaseModel):
+    """
+    คลาสสำหรับ request ข้อมูลออเดอร์ที่รอดำเนินการ
+    """
+    symbol: Optional[str] = Field(None, description="สัญลักษณ์เฉพาะ (ถ้าไม่ระบุจะดึงทั้งหมด)")
+    ticket: Optional[int] = Field(None, description="เลขที่ออเดอร์ (ถ้าไม่ระบุจะดึงทั้งหมด)")
+    magic: Optional[int] = Field(None, description="หมายเลข Magic (ถ้าไม่ระบุจะดึงทั้งหมด)")
+
+class HistoryOrdersRequest(BaseModel):
+    """
+    คลาสสำหรับ request ข้อมูลประวัติออเดอร์
+    """
+    from_date: str = Field(..., description="วันที่เริ่มต้น (รูปแบบ YYYY-MM-DD)")
+    to_date: Optional[str] = Field(None, description="วันที่สิ้นสุด (รูปแบบ YYYY-MM-DD) ถ้าไม่ระบุจะใช้วันปัจจุบัน")
+    symbol: Optional[str] = Field(None, description="สัญลักษณ์เฉพาะ (ถ้าไม่ระบุจะดึงทั้งหมด)")
+    ticket: Optional[int] = Field(None, description="เลขที่ออเดอร์ (ถ้าไม่ระบุจะดึงทั้งหมด)")
+    position: Optional[int] = Field(None, description="เลขที่ตำแหน่ง (ถ้าไม่ระบุจะดึงทั้งหมด)")
+
+class HistoryDealsRequest(BaseModel):
+    """
+    คลาสสำหรับ request ข้อมูลประวัติดีล
+    """
+    from_date: str = Field(..., description="วันที่เริ่มต้น (รูปแบบ YYYY-MM-DD)")
+    to_date: Optional[str] = Field(None, description="วันที่สิ้นสุด (รูปแบบ YYYY-MM-DD) ถ้าไม่ระบุจะใช้วันปัจจุบัน")
+    symbol: Optional[str] = Field(None, description="สัญลักษณ์เฉพาะ (ถ้าไม่ระบุจะดึงทั้งหมด)")
+    ticket: Optional[int] = Field(None, description="เลขที่ดีล (ถ้าไม่ระบุจะดึงทั้งหมด)")
+    position: Optional[int] = Field(None, description="เลขที่ตำแหน่ง (ถ้าไม่ระบุจะดึงทั้งหมด)")
+
+# Response Models
 class AccountInfoResponse(BaseModel):
     """
     คลาสสำหรับส่งข้อมูลบัญชี
@@ -129,3 +173,10 @@ class PositionsResponse(BaseModel):
     """
     positions: List[PositionInfo] = Field(..., description="รายการตำแหน่งที่เปิดอยู่")
     total: int = Field(..., description="จำนวนตำแหน่งทั้งหมด")
+
+class OrdersResponse(BaseModel):
+    """
+    คลาสสำหรับส่งข้อมูลออเดอร์ที่รอดำเนินการ
+    """
+    orders: List[OrderInfo] = Field(..., description="รายการออเดอร์ที่รอดำเนินการ")
+    total: int = Field(..., description="จำนวนออเดอร์ทั้งหมด")

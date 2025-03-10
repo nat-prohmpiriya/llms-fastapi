@@ -31,80 +31,73 @@ class IndicatorRequest(BaseModel):
     """
     symbol: str = Field(..., description="ชื่อสัญลักษณ์")
     timeframe: TimeFrame = Field(..., description="กรอบเวลา")
-    count: Optional[int] = Field(100, description="จำนวนค่าที่ต้องการ")
-    from_date: Optional[datetime] = Field(None, description="วันที่เริ่มต้น")
-    to_date: Optional[datetime] = Field(None, description="วันที่สิ้นสุด")
+    shift: Optional[int] = Field(0, description="จำนวนแท่งที่ต้องการถอยกลับจากแท่งปัจจุบัน")
 
-class MARequest(IndicatorRequest):
+class MovingAverageRequest(BaseModel):
     """
     คลาสสำหรับรับข้อมูลคำขอ Moving Average
     """
-    period: int = Field(..., description="จำนวนช่วงเวลา")
-    ma_method: MAMethod = Field(MAMethod.SMA, description="วิธีการคำนวณ MA")
-    price_type: PriceType = Field(PriceType.CLOSE, description="ประเภทราคาที่ใช้")
-    shift: Optional[int] = Field(0, description="การเลื่อนค่า")
+    symbol: str = Field(..., description="ชื่อสัญลักษณ์ (เช่น 'EURUSD')")
+    timeframe: TimeFrame = Field(..., description="กรอบเวลา")
+    period: int = Field(..., description="จำนวนช่วงเวลาสำหรับคำนวณ MA")
+    ma_type: MAMethod = Field(MAMethod.SMA, description="ประเภท MA (SMA, EMA, SMMA, LWMA)")
+    applied_price: PriceType = Field(PriceType.CLOSE, description="ประเภทราคาที่ใช้ (CLOSE, OPEN, HIGH, LOW, MEDIAN, TYPICAL, WEIGHTED)")
+    shift: Optional[int] = Field(0, description="จำนวนแท่งที่ต้องการถอยกลับจากแท่งปัจจุบัน")
 
-class RSIRequest(IndicatorRequest):
+class RSIRequest(BaseModel):
     """
     คลาสสำหรับรับข้อมูลคำขอ Relative Strength Index
     """
-    period: int = Field(..., description="จำนวนช่วงเวลา")
-    price_type: PriceType = Field(PriceType.CLOSE, description="ประเภทราคาที่ใช้")
+    symbol: str = Field(..., description="ชื่อสัญลักษณ์ (เช่น 'EURUSD')")
+    timeframe: TimeFrame = Field(..., description="กรอบเวลา")
+    period: int = Field(..., description="จำนวนช่วงเวลาสำหรับคำนวณ RSI")
+    applied_price: PriceType = Field(PriceType.CLOSE, description="ประเภทราคาที่ใช้ (CLOSE, OPEN, HIGH, LOW, MEDIAN, TYPICAL, WEIGHTED)")
+    shift: Optional[int] = Field(0, description="จำนวนแท่งที่ต้องการถอยกลับจากแท่งปัจจุบัน")
 
-class MACDRequest(IndicatorRequest):
+class MACDRequest(BaseModel):
     """
     คลาสสำหรับรับข้อมูลคำขอ MACD
     """
-    fast_period: int = Field(..., description="จำนวนช่วงเวลาสั้น")
-    slow_period: int = Field(..., description="จำนวนช่วงเวลายาว")
-    signal_period: int = Field(..., description="จำนวนช่วงเวลาสัญญาณ")
-    price_type: PriceType = Field(PriceType.CLOSE, description="ประเภทราคาที่ใช้")
+    symbol: str = Field(..., description="ชื่อสัญลักษณ์ (เช่น 'EURUSD')")
+    timeframe: TimeFrame = Field(..., description="กรอบเวลา")
+    fast_ema: int = Field(12, description="จำนวนช่วงเวลาสำหรับ Fast EMA")
+    slow_ema: int = Field(26, description="จำนวนช่วงเวลาสำหรับ Slow EMA")
+    signal_period: int = Field(9, description="จำนวนช่วงเวลาสำหรับ Signal Line")
+    applied_price: PriceType = Field(PriceType.CLOSE, description="ประเภทราคาที่ใช้ (CLOSE, OPEN, HIGH, LOW, MEDIAN, TYPICAL, WEIGHTED)")
+    shift: Optional[int] = Field(0, description="จำนวนแท่งที่ต้องการถอยกลับจากแท่งปัจจุบัน")
 
-class BollingerBandsRequest(IndicatorRequest):
+class BollingerBandsRequest(BaseModel):
     """
     คลาสสำหรับรับข้อมูลคำขอ Bollinger Bands
     """
-    period: int = Field(..., description="จำนวนช่วงเวลา")
-    deviation: float = Field(..., description="จำนวนเท่าของค่าเบี่ยงเบนมาตรฐาน")
-    price_type: PriceType = Field(PriceType.CLOSE, description="ประเภทราคาที่ใช้")
+    symbol: str = Field(..., description="ชื่อสัญลักษณ์ (เช่น 'EURUSD')")
+    timeframe: TimeFrame = Field(..., description="กรอบเวลา")
+    period: int = Field(20, description="จำนวนช่วงเวลาสำหรับคำนวณ")
+    deviation: float = Field(2.0, description="จำนวนเท่าของส่วนเบี่ยงเบนมาตรฐาน")
+    applied_price: PriceType = Field(PriceType.CLOSE, description="ประเภทราคาที่ใช้ (CLOSE, OPEN, HIGH, LOW, MEDIAN, TYPICAL, WEIGHTED)")
+    shift: Optional[int] = Field(0, description="จำนวนแท่งที่ต้องการถอยกลับจากแท่งปัจจุบัน")
 
-class StochasticRequest(IndicatorRequest):
+class StochasticRequest(BaseModel):
     """
     คลาสสำหรับรับข้อมูลคำขอ Stochastic Oscillator
     """
-    k_period: int = Field(..., description="จำนวนช่วงเวลา %K")
-    d_period: int = Field(..., description="จำนวนช่วงเวลา %D")
-    slowing: int = Field(..., description="ค่าการชะลอตัว")
-    ma_method: MAMethod = Field(MAMethod.SMA, description="วิธีการคำนวณ MA")
-    price_field: PriceType = Field(PriceType.CLOSE, description="ประเภทราคาที่ใช้")
+    symbol: str = Field(..., description="ชื่อสัญลักษณ์ (เช่น 'EURUSD')")
+    timeframe: TimeFrame = Field(..., description="กรอบเวลา")
+    k_period: int = Field(5, description="จำนวนช่วงเวลาสำหรับ %K")
+    d_period: int = Field(3, description="จำนวนช่วงเวลาสำหรับ %D")
+    slowing: int = Field(3, description="ค่าการชะลอตัว")
+    shift: Optional[int] = Field(0, description="จำนวนแท่งที่ต้องการถอยกลับจากแท่งปัจจุบัน")
 
-class ADXRequest(IndicatorRequest):
-    """
-    คลาสสำหรับรับข้อมูลคำขอ Average Directional Index
-    """
-    period: int = Field(..., description="จำนวนช่วงเวลา")
-
-class ATRRequest(IndicatorRequest):
-    """
-    คลาสสำหรับรับข้อมูลคำขอ Average True Range
-    """
-    period: int = Field(..., description="จำนวนช่วงเวลา")
-
-class IchimokuRequest(IndicatorRequest):
+class IchimokuRequest(BaseModel):
     """
     คลาสสำหรับรับข้อมูลคำขอ Ichimoku Kinko Hyo
     """
-    tenkan_sen: int = Field(..., description="จำนวนช่วงเวลา Tenkan-sen (Conversion Line)")
-    kijun_sen: int = Field(..., description="จำนวนช่วงเวลา Kijun-sen (Base Line)")
-    senkou_span_b: int = Field(..., description="จำนวนช่วงเวลา Senkou Span B (Leading Span B)")
-
-class FibonacciRequest(IndicatorRequest):
-    """
-    คลาสสำหรับรับข้อมูลคำขอ Fibonacci Retracement
-    """
-    high_price: float = Field(..., description="ราคาสูงสุด")
-    low_price: float = Field(..., description="ราคาต่ำสุด")
-    is_retracement: bool = Field(True, description="เป็น Retracement หรือ Extension")
+    symbol: str = Field(..., description="ชื่อสัญลักษณ์ (เช่น 'EURUSD')")
+    timeframe: TimeFrame = Field(..., description="กรอบเวลา")
+    tenkan_period: int = Field(9, description="จำนวนช่วงเวลาสำหรับ Tenkan-sen (Conversion Line)")
+    kijun_period: int = Field(26, description="จำนวนช่วงเวลาสำหรับ Kijun-sen (Base Line)")
+    senkou_span_b_period: int = Field(52, description="จำนวนช่วงเวลาสำหรับ Senkou Span B (Leading Span B)")
+    shift: Optional[int] = Field(0, description="จำนวนแท่งที่ต้องการถอยกลับจากแท่งปัจจุบัน")
 
 class IndicatorValue(BaseModel):
     """
@@ -113,67 +106,74 @@ class IndicatorValue(BaseModel):
     time: datetime = Field(..., description="เวลาของค่า")
     value: Union[float, List[float]] = Field(..., description="ค่าของอินดิเคเตอร์")
 
-class IndicatorResponse(BaseModel):
+class BaseIndicatorResponse(BaseModel):
     """
     คลาสพื้นฐานสำหรับส่งข้อมูลอินดิเคเตอร์
     """
+    success: bool = Field(..., description="สถานะความสำเร็จ")
+    message: str = Field(..., description="ข้อความ")
     symbol: str = Field(..., description="ชื่อสัญลักษณ์")
     timeframe: str = Field(..., description="กรอบเวลา")
-    indicator: str = Field(..., description="ชื่ออินดิเคเตอร์")
-    values: List[IndicatorValue] = Field(..., description="ค่าของอินดิเคเตอร์")
-    count: int = Field(..., description="จำนวนค่าทั้งหมด")
-    parameters: Dict[str, Any] = Field(..., description="พารามิเตอร์ที่ใช้ในการคำนวณ")
 
-class MAResponse(IndicatorResponse):
+class MovingAverageResponse(BaseIndicatorResponse):
     """
     คลาสสำหรับส่งข้อมูล Moving Average
     """
-    pass
+    value: Optional[float] = Field(None, description="ค่า Moving Average")
+    period: int = Field(..., description="จำนวนช่วงเวลาที่ใช้ในการคำนวณ")
+    ma_type: str = Field(..., description="ประเภทของ Moving Average")
+    applied_price: str = Field(..., description="ประเภทราคาที่ใช้")
 
-class RSIResponse(IndicatorResponse):
+class RSIResponse(BaseIndicatorResponse):
     """
     คลาสสำหรับส่งข้อมูล Relative Strength Index
     """
-    pass
+    value: Optional[float] = Field(None, description="ค่า RSI")
+    period: int = Field(..., description="จำนวนช่วงเวลาที่ใช้ในการคำนวณ")
+    applied_price: str = Field(..., description="ประเภทราคาที่ใช้")
 
-class MACDResponse(IndicatorResponse):
+class MACDResponse(BaseIndicatorResponse):
     """
     คลาสสำหรับส่งข้อมูล MACD
     """
-    pass
+    macd: Optional[float] = Field(None, description="ค่า MACD")
+    signal: Optional[float] = Field(None, description="ค่า Signal Line")
+    histogram: Optional[float] = Field(None, description="ค่า Histogram")
+    fast_ema: int = Field(..., description="จำนวนช่วงเวลาที่ใช้สำหรับ Fast EMA")
+    slow_ema: int = Field(..., description="จำนวนช่วงเวลาที่ใช้สำหรับ Slow EMA")
+    signal_period: int = Field(..., description="จำนวนช่วงเวลาที่ใช้สำหรับ Signal Line")
+    applied_price: str = Field(..., description="ประเภทราคาที่ใช้")
 
-class BollingerBandsResponse(IndicatorResponse):
+class BollingerBandsResponse(BaseIndicatorResponse):
     """
     คลาสสำหรับส่งข้อมูล Bollinger Bands
     """
-    pass
+    upper: Optional[float] = Field(None, description="ค่าเส้นบน")
+    middle: Optional[float] = Field(None, description="ค่าเส้นกลาง")
+    lower: Optional[float] = Field(None, description="ค่าเส้นล่าง")
+    period: int = Field(..., description="จำนวนช่วงเวลาที่ใช้ในการคำนวณ")
+    deviation: float = Field(..., description="จำนวนเท่าของส่วนเบี่ยงเบนมาตรฐาน")
+    applied_price: str = Field(..., description="ประเภทราคาที่ใช้")
 
-class StochasticResponse(IndicatorResponse):
+class StochasticResponse(BaseIndicatorResponse):
     """
     คลาสสำหรับส่งข้อมูล Stochastic Oscillator
     """
-    pass
+    k: Optional[float] = Field(None, description="ค่า %K")
+    d: Optional[float] = Field(None, description="ค่า %D")
+    k_period: int = Field(..., description="จำนวนช่วงเวลาที่ใช้สำหรับ %K")
+    d_period: int = Field(..., description="จำนวนช่วงเวลาที่ใช้สำหรับ %D")
+    slowing: int = Field(..., description="ค่าการชะลอตัว")
 
-class ADXResponse(IndicatorResponse):
-    """
-    คลาสสำหรับส่งข้อมูล Average Directional Index
-    """
-    pass
-
-class ATRResponse(IndicatorResponse):
-    """
-    คลาสสำหรับส่งข้อมูล Average True Range
-    """
-    pass
-
-class IchimokuResponse(IndicatorResponse):
+class IchimokuResponse(BaseIndicatorResponse):
     """
     คลาสสำหรับส่งข้อมูล Ichimoku Kinko Hyo
     """
-    pass
-
-class FibonacciResponse(IndicatorResponse):
-    """
-    คลาสสำหรับส่งข้อมูล Fibonacci Retracement
-    """
-    pass
+    tenkan_sen: Optional[float] = Field(None, description="ค่า Tenkan-sen (Conversion Line)")
+    kijun_sen: Optional[float] = Field(None, description="ค่า Kijun-sen (Base Line)")
+    senkou_span_a: Optional[float] = Field(None, description="ค่า Senkou Span A (Leading Span A)")
+    senkou_span_b: Optional[float] = Field(None, description="ค่า Senkou Span B (Leading Span B)")
+    chikou_span: Optional[float] = Field(None, description="ค่า Chikou Span (Lagging Span)")
+    tenkan_period: int = Field(..., description="จำนวนช่วงเวลาที่ใช้สำหรับ Tenkan-sen")
+    kijun_period: int = Field(..., description="จำนวนช่วงเวลาที่ใช้สำหรับ Kijun-sen")
+    senkou_span_b_period: int = Field(..., description="จำนวนช่วงเวลาที่ใช้สำหรับ Senkou Span B")

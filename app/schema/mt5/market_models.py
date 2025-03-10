@@ -17,6 +17,56 @@ class TimeFrame(str, Enum):
     W1 = "W1"      # 1 สัปดาห์
     MN1 = "MN1"    # 1 เดือน
 
+class TickFlag(str, Enum):
+    """
+    คลาสสำหรับกำหนดประเภทของ Tick
+    """
+    ALL = "ALL"    # ทั้งหมด
+    INFO = "INFO"  # ข้อมูล
+    TRADE = "TRADE"  # การซื้อขาย
+    BUY = "BUY"    # การซื้อ
+    SELL = "SELL"  # การขาย
+    LAST = "LAST"  # ล่าสุด
+
+# Request Models
+class SymbolsRequest(BaseModel):
+    """
+    คลาสสำหรับ request รายการสัญลักษณ์
+    """
+    group: Optional[str] = Field(None, description="กลุ่มสัญลักษณ์ (เช่น '*' หรือ 'EUR*')")
+
+class SymbolInfoRequest(BaseModel):
+    """
+    คลาสสำหรับ request ข้อมูลสัญลักษณ์
+    """
+    symbol: str = Field(..., description="ชื่อสัญลักษณ์ (เช่น 'EURUSD')")
+
+class LastTickRequest(BaseModel):
+    """
+    คลาสสำหรับ request ข้อมูล tick ล่าสุด
+    """
+    symbol: str = Field(..., description="ชื่อสัญลักษณ์ (เช่น 'EURUSD')")
+
+class CopyRatesRequest(BaseModel):
+    """
+    คลาสสำหรับ request ข้อมูลแท่งเทียน
+    """
+    symbol: str = Field(..., description="ชื่อสัญลักษณ์ (เช่น 'EURUSD')")
+    timeframe: TimeFrame = Field(..., description="กรอบเวลา")
+    from_date: Optional[datetime] = Field(None, description="วันที่เริ่มต้น (รูปแบบ YYYY-MM-DD HH:MM:SS)")
+    to_date: Optional[datetime] = Field(None, description="วันที่สิ้นสุด (รูปแบบ YYYY-MM-DD HH:MM:SS)")
+    count: Optional[int] = Field(None, description="จำนวนแท่งเทียนที่ต้องการ")
+
+class CopyTicksRequest(BaseModel):
+    """
+    คลาสสำหรับ request ข้อมูล tick
+    """
+    symbol: str = Field(..., description="ชื่อสัญลักษณ์ (เช่น 'EURUSD')")
+    from_date: datetime = Field(..., description="วันที่เริ่มต้น (รูปแบบ YYYY-MM-DD HH:MM:SS)")
+    to_date: datetime = Field(..., description="วันที่สิ้นสุด (รูปแบบ YYYY-MM-DD HH:MM:SS)")
+    flags: TickFlag = Field(TickFlag.ALL, description="ประเภทของ tick ที่ต้องการ")
+
+# Response Models
 class SymbolInfo(BaseModel):
     """
     คลาสสำหรับเก็บข้อมูลสัญลักษณ์
@@ -46,6 +96,8 @@ class SymbolsResponse(BaseModel):
     """
     คลาสสำหรับส่งข้อมูลรายการสัญลักษณ์
     """
+    success: bool = Field(..., description="สถานะความสำเร็จ")
+    message: str = Field(..., description="ข้อความ")
     symbols: List[str] = Field(..., description="รายการชื่อสัญลักษณ์")
     total: int = Field(..., description="จำนวนสัญลักษณ์ทั้งหมด")
 
@@ -53,7 +105,9 @@ class SymbolInfoResponse(BaseModel):
     """
     คลาสสำหรับส่งข้อมูลสัญลักษณ์
     """
-    info: SymbolInfo = Field(..., description="ข้อมูลสัญลักษณ์")
+    success: bool = Field(..., description="สถานะความสำเร็จ")
+    message: str = Field(..., description="ข้อความ")
+    info: Optional[SymbolInfo] = Field(None, description="ข้อมูลสัญลักษณ์")
 
 class TickData(BaseModel):
     """
@@ -66,46 +120,14 @@ class TickData(BaseModel):
     volume: float = Field(..., description="ปริมาณ")
     flags: int = Field(..., description="แฟล็ก")
 
-class PriceRequest(BaseModel):
+class LastTickResponse(BaseModel):
     """
-    คลาสสำหรับรับข้อมูลคำขอราคา
+    คลาสสำหรับส่งข้อมูล tick ล่าสุด
     """
+    success: bool = Field(..., description="สถานะความสำเร็จ")
+    message: str = Field(..., description="ข้อความ")
     symbol: str = Field(..., description="ชื่อสัญลักษณ์")
-
-class TickRequest(BaseModel):
-    """
-    คลาสสำหรับรับข้อมูลคำขอ tick
-    """
-    symbol: str = Field(..., description="ชื่อสัญลักษณ์")
-    count: Optional[int] = Field(100, description="จำนวน tick ที่ต้องการ")
-
-class OHLCRequest(BaseModel):
-    """
-    คลาสสำหรับรับข้อมูลคำขอ OHLC
-    """
-    symbol: str = Field(..., description="ชื่อสัญลักษณ์")
-    timeframe: TimeFrame = Field(..., description="กรอบเวลา")
-    count: Optional[int] = Field(100, description="จำนวนแท่งเทียนที่ต้องการ")
-    from_date: Optional[datetime] = Field(None, description="วันที่เริ่มต้น")
-    to_date: Optional[datetime] = Field(None, description="วันที่สิ้นสุด")
-
-class PriceResponse(BaseModel):
-    """
-    คลาสสำหรับส่งข้อมูลราคา
-    """
-    symbol: str = Field(..., description="ชื่อสัญลักษณ์")
-    bid: float = Field(..., description="ราคาเสนอซื้อ")
-    ask: float = Field(..., description="ราคาเสนอขาย")
-    last: float = Field(..., description="ราคาซื้อขายล่าสุด")
-    time: datetime = Field(..., description="เวลาของราคา")
-
-class TickResponse(BaseModel):
-    """
-    คลาสสำหรับส่งข้อมูล tick
-    """
-    symbol: str = Field(..., description="ชื่อสัญลักษณ์")
-    ticks: List[TickData] = Field(..., description="รายการข้อมูล tick")
-    count: int = Field(..., description="จำนวน tick ทั้งหมด")
+    tick: Optional[TickData] = Field(None, description="ข้อมูล tick ล่าสุด")
 
 class CandleData(BaseModel):
     """
@@ -120,11 +142,23 @@ class CandleData(BaseModel):
     spread: int = Field(..., description="สเปรด")
     real_volume: int = Field(..., description="ปริมาณจริง")
 
-class OHLCResponse(BaseModel):
+class CopyRatesResponse(BaseModel):
     """
-    คลาสสำหรับส่งข้อมูล OHLC
+    คลาสสำหรับส่งข้อมูลแท่งเทียน
     """
+    success: bool = Field(..., description="สถานะความสำเร็จ")
+    message: str = Field(..., description="ข้อความ")
     symbol: str = Field(..., description="ชื่อสัญลักษณ์")
     timeframe: str = Field(..., description="กรอบเวลา")
-    candles: List[CandleData] = Field(..., description="รายการข้อมูลแท่งเทียน")
-    count: int = Field(..., description="จำนวนแท่งเทียนทั้งหมด")
+    candles: List[CandleData] = Field([], description="รายการข้อมูลแท่งเทียน")
+    count: int = Field(0, description="จำนวนแท่งเทียนทั้งหมด")
+
+class CopyTicksResponse(BaseModel):
+    """
+    คลาสสำหรับส่งข้อมูล tick
+    """
+    success: bool = Field(..., description="สถานะความสำเร็จ")
+    message: str = Field(..., description="ข้อความ")
+    symbol: str = Field(..., description="ชื่อสัญลักษณ์")
+    ticks: List[TickData] = Field([], description="รายการข้อมูล tick")
+    count: int = Field(0, description="จำนวน tick ทั้งหมด")

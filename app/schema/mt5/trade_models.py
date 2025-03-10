@@ -33,7 +33,7 @@ class OrderTime(int, Enum):
     SPECIFIED = 2 # Good Till Specified
     SPECIFIED_DAY = 3 # Good Till Specified Day
 
-class OpenOrderRequest(BaseModel):
+class OrderRequest(BaseModel):
     """
     คลาสสำหรับรับข้อมูลคำขอเปิดออเดอร์
     """
@@ -94,7 +94,7 @@ class CloseAllRequest(BaseModel):
     magic: Optional[int] = Field(None, description="หมายเลข Magic (ถ้าไม่ระบุจะปิดทั้งหมด)")
     comment: Optional[str] = Field(None, description="ความคิดเห็น")
 
-class TradeResponse(BaseModel):
+class OrderResponse(BaseModel):
     """
     คลาสสำหรับส่งข้อมูลผลลัพธ์การเทรด
     """
