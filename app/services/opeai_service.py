@@ -2,6 +2,8 @@ import os
 from openai import AsyncOpenAI
 from dotenv import load_dotenv
 from schema.openai.chat_models import ChatRequest, ChatResponse, ChatMessage
+from schema.openai.embeddings_models import EmbeddingsRequest, EmbeddingsResponse, EmbeddingData, EmbeddingsUsage
+from typing import List
 
 # โหลดตัวแปรจากไฟล์ .env
 load_dotenv()
@@ -42,4 +44,47 @@ class OpenAIService:
                 "completion_tokens": response.usage.completion_tokens,
                 "total_tokens": response.usage.total_tokens
             }
+        )
+    
+    async def create_embeddings(self, request: EmbeddingsRequest) -> EmbeddingsResponse:
+        """
+        สร้าง embeddings จากข้อความที่ได้รับ
+        
+        Args:
+            request: ข้อมูลคำขอ embeddings
+            
+        Returns:
+            EmbeddingsResponse: ข้อมูลตอบกลับที่มี embeddings
+        """
+        # สร้างพารามิเตอร์สำหรับการเรียก API
+        params = {
+            "model": request.model,
+            "input": request.input,
+            "encoding_format": request.encoding_format
+        }
+        
+        # เพิ่ม dimensions ถ้ามีการระบุ
+        if request.dimensions:
+            params["dimensions"] = request.dimensions
+            
+        # เรียกใช้ API
+        response = await self.client.embeddings.create(**params)
+        
+        # สร้างข้อมูลตอบกลับ
+        embedding_data = [
+            EmbeddingData(
+                embedding=item.embedding,
+                index=item.index,
+                object=item.object
+            ) for item in response.data
+        ]
+        
+        return EmbeddingsResponse(
+            data=embedding_data,
+            model=response.model,
+            object=response.object,
+            usage=EmbeddingsUsage(
+                prompt_tokens=response.usage.prompt_tokens,
+                total_tokens=response.usage.total_tokens
+            )
         )
