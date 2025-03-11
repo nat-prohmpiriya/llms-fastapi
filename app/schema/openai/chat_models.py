@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field
-from typing import List, Optional, Literal
+from typing import List, Optional, Literal, Dict
 
 class ChatMessage(BaseModel):
     role: Literal["system", "user", "assistant"] = "user"
@@ -14,5 +14,10 @@ class ChatRequest(BaseModel):
     default_system_message: Optional[bool] = Field(default=True, description="เพิ่ม system message เริ่มต้นหรือไม่")
 
 class ChatResponse(BaseModel):
-    message: str
-    usage: Optional[dict] = None
+    message: ChatMessage
+    usage: Optional[Dict[str, int]] = None
+
+class ChatStreamResponse(BaseModel):
+    delta: str
+    finish_reason: Optional[str] = None
+    index: int = 0
